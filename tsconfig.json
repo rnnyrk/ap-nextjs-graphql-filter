@@ -17,7 +17,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "pages": ["pages/*"],
+      "pages/*": ["pages/*"],
+      "common/*": ["components/common/*"],
       "services/*": ["services/*"],
       "types": ["types/index"],
     },

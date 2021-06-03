@@ -4,5 +4,9 @@
   ],
   "plugins": [
     "@babel/plugin-proposal-export-default-from",
+    ["babel-plugin-styled-components", {
+      "ssr": true,
+      "preprocess": false
+    }]
   ]
 }

@@ -7,13 +7,8 @@ export const resolvers = {
 
       try {
         const products = typeof offset !== 'undefined' && offset >= 0 && limit
-          ? data.products.slice(offset, limit)
+          ? data.products.slice(offset, offset + limit)
           : data.products;
-
-        console.log({
-          products,
-          length: products.length,
-        });
 
         return products.map((product) => ({
           name: product.node.name,
@@ -23,6 +18,9 @@ export const resolvers = {
       } catch (error) {
         throw error;
       }
+    },
+    getTotalProducts: () => {
+      return data.products.length;
     },
   },
 };
