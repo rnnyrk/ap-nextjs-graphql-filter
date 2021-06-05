@@ -8,6 +8,9 @@ declare module '*.json' {
 declare module '*.graphql' {
   export default any;
 }
+declare module '*.gql' {
+  export default any;
+}
 
 // Image files
 declare module '*.svg' {

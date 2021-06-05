@@ -18,6 +18,8 @@ export const resolvers = {
         if (from && to) {
           products = filterPriceRange(products, from, to);
         }
+        // Count must be saved without pagination filtered
+        const count = products.length;
         if (typeof offset !== 'undefined' && offset >= 0 && limit) {
           products = filterPage(products, offset, limit);
         }
@@ -32,7 +34,7 @@ export const resolvers = {
               price,
             };
           }),
-          count: products.length,
+          count,
         };
       } catch (error) {
         throw error;

@@ -5,8 +5,7 @@ import useSWR from 'swr';
 
 import { fetcher } from 'services';
 import { useQueryParams } from 'hooks';
-import getProductsQuery from 'queries/getProducts.graphql';
-import initialDataQuery from 'queries/initialData.graphql';
+import Queries from 'queries/getProducts.gql';
 import { ProductsFilter, ProductsOverview } from 'modules/products';
 import { Container, Pagination } from 'common/layout';
 import { Button } from 'common/interaction';
@@ -33,7 +32,7 @@ const Home: React.FC<HomeProps> = ({
     getProducts: i.ProductsResponse;
   }>(
     [
-      getProductsQuery,
+      Queries.ProductsQuery,
       variables,
     ],
     fetcher,
@@ -92,7 +91,7 @@ type HomeProps = {
 
 export const getServerSideProps = async ({ query }) => {
   const data = await fetcher(
-    initialDataQuery,
+    Queries.InitialProductsQuery,
     {
       offset: 0,
       limit,

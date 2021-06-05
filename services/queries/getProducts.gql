@@ -1,0 +1,57 @@
+query ProductsQuery(
+  $offset: Int!,
+  $limit: Int!,
+  $categories: String,
+  $colors: String,
+  $from: String,
+  $to: String
+) {
+  getProducts(
+    offset: $offset,
+    limit: $limit,
+    categories: $categories,
+    colors: $colors,
+    from: $from,
+    to: $to
+  ) {
+    products {
+      name
+      image
+      categories
+      price
+    }
+    count
+  }
+}
+
+fragment products on GetProducts {
+  products {
+    name
+    image
+    categories
+    price
+  }
+  count
+}
+
+query InitialProductsQuery (
+  $offset: Int!,
+  $limit: Int!,
+  $categories: String,
+  $colors: String,
+  $from: String,
+  $to: String
+) {
+  getProducts(
+    offset: $offset,
+    limit: $limit,
+    categories: $categories,
+    colors: $colors,
+    from: $from,
+    to: $to
+  ) {
+    ...products
+  }
+  getCategories
+  getColors
+}
