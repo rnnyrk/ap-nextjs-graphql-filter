@@ -20,6 +20,7 @@
       "pages/*": ["pages/*"],
       "common/*": ["components/common/*"],
       "services/*": ["services/*"],
+      "styles": ["styles/index"],
       "types": ["types/index"],
     },
     "lib": [

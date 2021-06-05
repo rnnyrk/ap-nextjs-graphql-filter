@@ -7,13 +7,15 @@ export const Button = styled.button<ButtonProps>`
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  color: blue;
-  border: 1px solid blue;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.purple};
+  border: 2px solid ${({ theme }) => theme.colors.purple};
+  background-color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
 
   ${({ active }) => active && css`
-    color: #fff;
-    background-color: blue;
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.purple};
   `};
 `;
 
