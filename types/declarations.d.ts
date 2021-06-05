@@ -5,6 +5,9 @@ declare module '*.json' {
   const value: Json;
   export default value;
 }
+declare module '*.graphql' {
+  export default any;
+}
 
 // Image files
 declare module '*.svg' {

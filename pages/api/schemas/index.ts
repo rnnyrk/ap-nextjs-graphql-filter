@@ -8,6 +8,11 @@ export const typeDefs = gql`
     price: String
   }
 
+  type GetProducts {
+    products: [Product]
+    count: Int
+  }
+
   type Query {
     getProducts(
       offset: Int!,
@@ -16,8 +21,7 @@ export const typeDefs = gql`
       colors: String,
       from: String,
       to: String
-    ): [Product]
-    getTotalProducts(categories: String, colors: String, from: String, to: String): Int
+    ): GetProducts
     getCategories: [String]
     getColors: [String]
   }

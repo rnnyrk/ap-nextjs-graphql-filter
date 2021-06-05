@@ -1,0 +1,25 @@
+query GetProducts(
+  $offset: Int!,
+  $limit: Int!,
+  $categories: String,
+  $colors: String,
+  $from: String,
+  $to: String
+) {
+  getProducts(
+    offset: $offset,
+    limit: $limit,
+    categories: $categories,
+    colors: $colors,
+    from: $from,
+    to: $to
+  ) {
+    products {
+      name
+      image
+      categories
+      price
+    }
+    count
+  }
+}

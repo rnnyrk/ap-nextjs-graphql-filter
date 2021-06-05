@@ -5,6 +5,8 @@ import useSWR from 'swr';
 
 import { fetcher } from 'services';
 import { useQueryParams } from 'hooks';
+import getProductsQuery from 'queries/getProducts.graphql';
+import initialDataQuery from 'queries/initialData.graphql';
 import { ProductsFilter, ProductsOverview } from 'modules/products';
 import { Container, Pagination } from 'common/layout';
 import { Button } from 'common/interaction';
@@ -12,11 +14,11 @@ import { Button } from 'common/interaction';
 const limit = 21;
 
 const Home: React.FC<HomeProps> = ({
-  getCategories, getColors, getTotalProducts, getProducts,
+  getCategories, getColors, getProducts,
 }) => {
   const { queryParams } = useQueryParams();
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [pages, setPages] = React.useState(Math.floor((getTotalProducts || 0) / limit));
+  const [pages, setPages] = React.useState(Math.floor((getProducts?.count || 0) / limit));
 
   const variables = React.useMemo(() => ({
     offset: currentPage === 1 ? 0 : ((currentPage - 1) * limit),
@@ -28,47 +30,23 @@ const Home: React.FC<HomeProps> = ({
   }), [currentPage, queryParams]);
 
   const { data, isValidating, error } = useSWR<{
-    getProducts: i.Product[];
-    getTotalProducts: number;
+    getProducts: i.ProductsResponse;
   }>(
     [
-      `query GetProducts(
-        $offset: Int!,
-        $limit: Int!,
-        $categories: String,
-        $colors: String,
-        $from: String,
-        $to: String
-      ) {
-        getProducts(
-          offset: $offset,
-          limit: $limit,
-          categories: $categories,
-          colors: $colors,
-          from: $from,
-          to: $to
-        ) {
-          name
-          image
-          categories
-          price
-        }
-        getTotalProducts(categories: $categories, colors: $colors, from: $from, to: $to)
-      }`,
+      getProductsQuery,
       variables,
     ],
     fetcher,
     {
       initialData: {
         getProducts,
-        getTotalProducts,
       },
     },
   );
 
   React.useEffect(() => {
-    setPages(Math.floor((data?.getTotalProducts || 0) / limit));
-  }, [data?.getTotalProducts]);
+    setPages(Math.floor((data?.getProducts?.count || 0) / limit));
+  }, [data?.getProducts?.count]);
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -83,8 +61,8 @@ const Home: React.FC<HomeProps> = ({
 
       <ProductsFilter categories={getCategories} colors={getColors} />
 
-      {data?.getProducts && (
-        <ProductsOverview products={data.getProducts} loading={isValidating} />
+      {data?.getProducts?.products && (
+        <ProductsOverview products={data.getProducts.products} loading={isValidating} />
       )}
 
       <Pagination>
@@ -109,37 +87,12 @@ const Home: React.FC<HomeProps> = ({
 type HomeProps = {
   getCategories: string[];
   getColors: string[];
-  getTotalProducts: number;
-  getProducts: i.Product[];
+  getProducts: i.ProductsResponse;
 };
 
 export const getServerSideProps = async ({ query }) => {
   const data = await fetcher(
-    `query GetProducts(
-      $offset: Int!,
-      $limit: Int!,
-      $categories: String,
-      $colors: String,
-      $from: String,
-      $to: String
-    ) {
-      getProducts(
-        offset: $offset,
-        limit: $limit,
-        categories: $categories,
-        colors: $colors,
-        from: $from,
-        to: $to
-      ) {
-        name
-        image
-        categories
-        price
-      }
-      getTotalProducts(categories: $categories, colors: $colors, from: $from, to: $to)
-      getCategories
-      getColors
-    }`,
+    initialDataQuery,
     {
       offset: 0,
       limit,
@@ -161,7 +114,6 @@ export const getServerSideProps = async ({ query }) => {
       getCategories: data.getCategories,
       getColors: data.getColors,
       getProducts: data.getProducts,
-      getTotalProducts: data.getTotalProducts,
     },
   };
 };

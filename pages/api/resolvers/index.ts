@@ -22,35 +22,18 @@ export const resolvers = {
           products = filterPage(products, offset, limit);
         }
 
-        return products.map((product) => {
-          const price = product.node.shopifyProductEu?.variants.edges[0].node.price;
-          return {
-            name: product.node.name,
-            image: product.node.thumbnailImage.file.url,
-            categories: product.node.categoryTags,
-            price,
-          };
-        });
-      } catch (error) {
-        throw error;
-      }
-    },
-    getTotalProducts: (_, args) => {
-      const { categories, colors, from, to } = args;
-
-      try {
-        let products = data.products;
-        if (categories) {
-          products = filterCategories(products, categories);
-        }
-        if (colors) {
-          products = filterColors(products, colors);
-        }
-        if (from && to) {
-          products = filterPriceRange(products, from, to);
-        }
-
-        return products.length;
+        return {
+          products: products.map((product) => {
+            const price = product.node.shopifyProductEu?.variants.edges[0].node.price;
+            return {
+              name: product.node.name,
+              image: product.node.thumbnailImage.file.url,
+              categories: product.node.categoryTags,
+              price,
+            };
+          }),
+          count: products.length,
+        };
       } catch (error) {
         throw error;
       }

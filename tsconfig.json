@@ -24,6 +24,8 @@
       "services/*": ["services/*"],
       "hooks": ["services/hooks/index"],
       "hooks/*": ["services/hooks/*"],
+      "queries": ["services/queries/index"],
+      "queries/*": ["services/queries/*"],
       "styles": ["styles/index"],
       "types": ["types/index"],
       "vectors/*": ["static/vectors/*"]
