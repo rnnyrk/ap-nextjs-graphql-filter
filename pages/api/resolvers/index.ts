@@ -1,4 +1,5 @@
 import data from '../data.js';
+import { filterCategories, paginatedProducts } from './filters';
 
 export const resolvers = {
   Query: {
@@ -7,18 +8,11 @@ export const resolvers = {
 
       try {
         let products = data.products;
-
         if (categories) {
-          products = data.products.filter((product) => {
-            const tags = product?.node?.categoryTags;
-            if (!tags) return false;
-            const list = categories[0].split(',');
-            return tags.some((t) => list.includes(t));
-          });
+          products = filterCategories(products, categories);
         }
-
         if (typeof offset !== 'undefined' && offset >= 0 && limit) {
-          products = products.slice(offset, offset + limit);
+          products = paginatedProducts(products, offset, limit);
         }
 
         return products.map((product) => ({
@@ -30,8 +24,19 @@ export const resolvers = {
         throw error;
       }
     },
-    getTotalProducts: () => {
-      return data.products.length;
+    getTotalProducts: (_, args) => {
+      const { categories } = args;
+
+      try {
+        let products = data.products;
+        if (categories) {
+          products = filterCategories(products, categories);
+        }
+
+        return products.length;
+      } catch (error) {
+        throw error;
+      }
     },
     getCategories: () => {
       try {

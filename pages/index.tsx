@@ -12,20 +12,19 @@ import { Button } from 'common/interaction';
 const limit = 21;
 
 const Home: React.FC<HomeProps> = ({
-  getProducts, getCategories, total,
+  getProducts, getCategories, getTotalProducts,
 }) => {
   const { queryParams } = useQueryParams();
-  const [page, setPage] = React.useState(1);
-
-  const pages = Math.floor((total || 0) / limit);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pages, setPages] = React.useState(Math.floor((getTotalProducts || 0) / limit));
 
   const variables = React.useMemo(() => ({
-    offset: page === 1 ? 0 : (page + 1) * limit,
+    offset: currentPage === 1 ? 0 : (currentPage + 1) * limit,
     limit,
     categories: queryParams?.categories,
-  }), [page, queryParams]);
+  }), [currentPage, queryParams]);
 
-  const { data } = useSWR<{ getProducts: i.Product[] }>(
+  const { data } = useSWR<{ getProducts: i.Product[]; getTotalProducts: number; }>(
     [
       `query GetProducts($offset: Int!, $limit: Int!, $categories: [String]) {
         getProducts(offset: $offset, limit: $limit, categories: $categories) {
@@ -33,6 +32,7 @@ const Home: React.FC<HomeProps> = ({
           image
           categories
         }
+        getTotalProducts(categories: $categories)
       }`,
       variables,
     ],
@@ -40,9 +40,14 @@ const Home: React.FC<HomeProps> = ({
     {
       initialData: {
         getProducts,
+        getTotalProducts,
       },
     },
   );
+
+  React.useEffect(() => {
+    setPages(Math.floor((data?.getTotalProducts || 0) / limit));
+  }, [data?.getTotalProducts]);
 
   return (
     <Container>
@@ -58,8 +63,8 @@ const Home: React.FC<HomeProps> = ({
           return (
             <Button
               key={`button_${pageNumber}`}
-              onClick={() => setPage(current)}
-              active={current === page}
+              onClick={() => setCurrentPage(current)}
+              active={current === currentPage}
             >
               {current}
             </Button>
@@ -79,7 +84,7 @@ const Home: React.FC<HomeProps> = ({
 type HomeProps = {
   getProducts: i.Product[];
   getCategories: string[];
-  total: number;
+  getTotalProducts: number;
 };
 
 export const getServerSideProps = async () => {
@@ -109,7 +114,7 @@ export const getServerSideProps = async () => {
     props: {
       getProducts: data.getProducts,
       getCategories: data.getCategories,
-      total: data.getTotalProducts,
+      getTotalProducts: data.getTotalProducts,
     },
   };
 };

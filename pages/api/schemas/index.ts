@@ -10,7 +10,7 @@ export const typeDefs = gql`
 
   type Query {
     getProducts(offset: Int!, limit: Int!, categories: [String]): [Product]
-    getTotalProducts: Int
+    getTotalProducts(categories: [String]): Int
     getCategories: [String]
   }
 `;
