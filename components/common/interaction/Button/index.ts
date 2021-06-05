@@ -8,10 +8,16 @@ export const Button = styled.button<ButtonProps>`
   font-size: 14px;
   font-weight: bold;
   padding: 4px 12px;
+  cursor: pointer;
   color: ${({ theme }) => theme.colors.purple};
   border: 2px solid ${({ theme }) => theme.colors.purple};
   background-color: ${({ theme }) => theme.colors.white};
-  cursor: pointer;
+  transition: background-color .2s, color .2s;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.purple};
+  }
 
   ${({ active }) => active && css`
     color: ${({ theme }) => theme.colors.white};

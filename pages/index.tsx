@@ -12,7 +12,7 @@ import { Button } from 'common/interaction';
 const limit = 21;
 
 const Home: React.FC<HomeProps> = ({
-  getProducts, getCategories, getTotalProducts,
+  getCategories, getColors, getTotalProducts, getProducts,
 }) => {
   const { queryParams } = useQueryParams();
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -22,23 +22,38 @@ const Home: React.FC<HomeProps> = ({
     offset: currentPage === 1 ? 0 : ((currentPage - 1) * limit),
     limit,
     categories: queryParams?.categories,
+    colors: queryParams?.colors,
     from: queryParams?.from,
     to: queryParams?.to,
   }), [currentPage, queryParams]);
 
-  const { data, isValidating } = useSWR<{
+  const { data, isValidating, error } = useSWR<{
     getProducts: i.Product[];
     getTotalProducts: number;
   }>(
     [
-      `query GetProducts($offset: Int!, $limit: Int!, $categories: String, $from: String, $to: String) {
-        getProducts(offset: $offset, limit: $limit, categories: $categories, from: $from, to: $to) {
+      `query GetProducts(
+        $offset: Int!,
+        $limit: Int!,
+        $categories: String,
+        $colors: String,
+        $from: String,
+        $to: String
+      ) {
+        getProducts(
+          offset: $offset,
+          limit: $limit,
+          categories: $categories,
+          colors: $colors,
+          from: $from,
+          to: $to
+        ) {
           name
           image
           categories
           price
         }
-        getTotalProducts(categories: $categories, from: $from, to: $to)
+        getTotalProducts(categories: $categories, colors: $colors, from: $from, to: $to)
       }`,
       variables,
     ],
@@ -66,7 +81,7 @@ const Home: React.FC<HomeProps> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ProductsFilter categories={getCategories} />
+      <ProductsFilter categories={getCategories} colors={getColors} />
 
       {data?.getProducts && (
         <ProductsOverview products={data.getProducts} loading={isValidating} />
@@ -92,27 +107,44 @@ const Home: React.FC<HomeProps> = ({
 };
 
 type HomeProps = {
-  getProducts: i.Product[];
   getCategories: string[];
+  getColors: string[];
   getTotalProducts: number;
+  getProducts: i.Product[];
 };
 
 export const getServerSideProps = async ({ query }) => {
   const data = await fetcher(
-    `query GetProducts($offset: Int!, $limit: Int!, $categories: String, $from: String, $to: String) {
-      getProducts(offset: $offset, limit: $limit, categories: $categories, from: $from, to: $to) {
+    `query GetProducts(
+      $offset: Int!,
+      $limit: Int!,
+      $categories: String,
+      $colors: String,
+      $from: String,
+      $to: String
+    ) {
+      getProducts(
+        offset: $offset,
+        limit: $limit,
+        categories: $categories,
+        colors: $colors,
+        from: $from,
+        to: $to
+      ) {
         name
         image
         categories
         price
       }
-      getTotalProducts(categories: $categories, from: $from, to: $to)
+      getTotalProducts(categories: $categories, colors: $colors, from: $from, to: $to)
       getCategories
+      getColors
     }`,
     {
       offset: 0,
       limit,
       categories: query?.categories,
+      colors: query?.colors,
       from: query?.from,
       to: query?.to,
     },
@@ -126,8 +158,9 @@ export const getServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      getProducts: data.getProducts,
       getCategories: data.getCategories,
+      getColors: data.getColors,
+      getProducts: data.getProducts,
       getTotalProducts: data.getTotalProducts,
     },
   };

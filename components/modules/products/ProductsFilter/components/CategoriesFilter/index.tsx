@@ -20,19 +20,16 @@ export const CategoriesFilter: React.FC<CategoriesFilterProps> = ({
   }, []);
 
   const onSetCategory = (categoryName: string) => {
-    let categories = [...activeCategories];
-
-    if (categories.includes(categoryName)) {
-      categories = removeItemFromArray(categories, categoryName);
+    let newCategories = [...activeCategories];
+    if (newCategories.includes(categoryName)) {
+      newCategories = removeItemFromArray(newCategories, categoryName);
     } else {
-      categories.push(categoryName);
+      newCategories.push(categoryName);
     }
 
-    setActiveCategories(categories);
-    setQueryParams({ ...queryParams, categories: categories.join(',') });
+    setActiveCategories(newCategories);
+    setQueryParams({ ...queryParams, categories: newCategories.join(',') });
   };
-
-  if (!categories) return null;
 
   return (
     <CategoriesFilterContainer>
@@ -52,5 +49,5 @@ export const CategoriesFilter: React.FC<CategoriesFilterProps> = ({
 };
 
 type CategoriesFilterProps = {
-  categories?: string[];
+  categories: string[];
 };

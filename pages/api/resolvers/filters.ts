@@ -7,6 +7,15 @@ export const filterCategories = (products, categories) => {
   });
 };
 
+export const filterColors = (products, colors) => {
+  return products.filter((product) => {
+    const color = product.node.colorFamily?.[0].name;
+    if (!color) return false;
+    const list = colors.split(',');
+    return list.includes(color);
+  });
+};
+
 export const filterPriceRange = (products, from, to) => {
   return products.filter((product) => {
     const fromPrice = parseInt(from, 10);

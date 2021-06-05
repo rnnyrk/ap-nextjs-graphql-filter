@@ -1,14 +1,15 @@
 import * as React from 'react';
 
-import { CategoriesFilter, PriceFilter } from './components';
+import { CategoriesFilter, ColorsFilter, PriceFilter } from './components';
 import { ProductsFilterContainer } from './styled';
 
 export const ProductsFilter: React.FC<ProductsFilterProps> = ({
-  categories,
+  categories, colors,
 }) => {
   return (
     <ProductsFilterContainer>
-      <CategoriesFilter categories={categories} />
+      {categories && <CategoriesFilter categories={categories} />}
+      {colors && <ColorsFilter colors={colors} />}
       <PriceFilter />
     </ProductsFilterContainer>
   );
@@ -16,4 +17,5 @@ export const ProductsFilter: React.FC<ProductsFilterProps> = ({
 
 type ProductsFilterProps = {
   categories?: string[];
+  colors?: string[];
 };

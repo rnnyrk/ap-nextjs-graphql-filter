@@ -1,16 +1,19 @@
 import data from '../data.js';
-import { filterCategories, filterPriceRange, filterPage } from './filters';
+import { filterCategories, filterColors, filterPriceRange, filterPage } from './filters';
 
 export const resolvers = {
   Query: {
     getProducts: (_, args) => {
-      const { offset, limit, categories, from, to } = args;
+      const { offset, limit, categories, colors, from, to } = args;
 
       try {
         let products = data.products;
 
         if (categories) {
           products = filterCategories(products, categories);
+        }
+        if (colors) {
+          products = filterColors(products, colors);
         }
         if (from && to) {
           products = filterPriceRange(products, from, to);
@@ -33,12 +36,15 @@ export const resolvers = {
       }
     },
     getTotalProducts: (_, args) => {
-      const { categories, from, to } = args;
+      const { categories, colors, from, to } = args;
 
       try {
         let products = data.products;
         if (categories) {
           products = filterCategories(products, categories);
+        }
+        if (colors) {
+          products = filterColors(products, colors);
         }
         if (from && to) {
           products = filterPriceRange(products, from, to);
@@ -59,6 +65,20 @@ export const resolvers = {
               acc.push(tag);
             }
           });
+          return acc;
+        }, []);
+      } catch (error) {
+        throw error;
+      }
+    },
+    getColors: () => {
+      try {
+        return data.products.reduce((acc, product) => {
+          const color = product.node.colorFamily?.[0].name;
+          if (!color) return acc;
+          if (!acc.includes(color.trim())) {
+            acc.push(color);
+          }
           return acc;
         }, []);
       } catch (error) {
