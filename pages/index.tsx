@@ -19,14 +19,14 @@ const Home: React.FC<HomeProps> = ({
   const [pages, setPages] = React.useState(Math.floor((getTotalProducts || 0) / limit));
 
   const variables = React.useMemo(() => ({
-    offset: currentPage === 1 ? 0 : (currentPage + 1) * limit,
+    offset: currentPage === 1 ? 0 : ((currentPage - 1) * limit),
     limit,
     categories: queryParams?.categories,
     from: queryParams?.from,
     to: queryParams?.to,
   }), [currentPage, queryParams]);
 
-  const { data, isValidating } = useSWR<{
+  const { data, isValidating, error } = useSWR<{
     getProducts: i.Product[];
     getTotalProducts: number;
   }>(
