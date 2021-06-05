@@ -12,6 +12,13 @@ export const ProductsFilter: React.FC<ProductsFilterProps> = ({
   const { queryParams, setQueryParams } = useQueryParams();
   const [activeCategories, setActiveCategories] = React.useState<string[]>([]);
 
+  React.useEffect(() => {
+    if (queryParams?.categories) {
+      const categories = queryParams.categories as string;
+      setActiveCategories(categories.split(','));
+    }
+  }, []);
+
   const onSetCategory = (categoryName: string) => {
     let categories = [...activeCategories];
 

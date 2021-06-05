@@ -87,20 +87,21 @@ type HomeProps = {
   getTotalProducts: number;
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({ query }) => {
   const data = await fetcher(
-    `query GetProducts($offset: Int!, $limit: Int!) {
-        getProducts(offset: $offset, limit: $limit) {
-          name
-          image
-          categories
-        }
-        getCategories
-        getTotalProducts
+    `query GetProducts($offset: Int!, $limit: Int!, $categories: [String]) {
+      getProducts(offset: $offset, limit: $limit, categories: $categories) {
+        name
+        image
+        categories
+      }
+      getTotalProducts(categories: $categories)
+      getCategories
     }`,
     {
       offset: 0,
       limit,
+      categories: query?.categories ? query.categories.split(',') : null,
     },
   );
 
