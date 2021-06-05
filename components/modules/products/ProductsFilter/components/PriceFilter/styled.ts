@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PriceFilterContainer = styled.div`
+export const PriceFilterForm = styled.form`
   width: 100%;
   display: flex;
 `;
