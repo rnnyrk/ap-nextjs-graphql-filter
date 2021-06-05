@@ -4,6 +4,7 @@ import { Button } from '../../interaction';
 
 export const Pagination = styled.div`
   display: flex;
+  margin-top: 16px;
 
   ${Button} {
     margin-right: 6px;

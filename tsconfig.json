@@ -26,6 +26,7 @@
       "hooks/*": ["services/hooks/*"],
       "styles": ["styles/index"],
       "types": ["types/index"],
+      "vectors/*": ["static/vectors/*"]
     },
     "lib": ["dom", "esnext"],
   },
