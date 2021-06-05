@@ -6,11 +6,12 @@ export const typeDefs = gql`
     name: String
     image: String
     categories: [String]
+    price: Int
   }
 
   type Query {
-    getProducts(offset: Int!, limit: Int!, categories: [String]): [Product]
-    getTotalProducts(categories: [String]): Int
+    getProducts(offset: Int!, limit: Int!, categories: String, from: String, to: String): [Product]
+    getTotalProducts(categories: String, from: String, to: String): Int
     getCategories: [String]
   }
 `;

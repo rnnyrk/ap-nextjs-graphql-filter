@@ -1,13 +1,13 @@
 import styled, { css } from 'styled-components';
 
 export const Button = styled.button<ButtonProps>`
-  width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 14px;
   font-weight: bold;
+  padding: 4px 12px;
   color: ${({ theme }) => theme.colors.purple};
   border: 2px solid ${({ theme }) => theme.colors.purple};
   background-color: ${({ theme }) => theme.colors.white};
@@ -17,8 +17,14 @@ export const Button = styled.button<ButtonProps>`
     color: ${({ theme }) => theme.colors.white};
     background-color: ${({ theme }) => theme.colors.purple};
   `};
+
+  ${({ variant }) => variant === 'square' && css`
+    width: 40px;
+    padding: 0;
+  `};
 `;
 
 type ButtonProps = {
-  active: boolean;
+  active?: boolean;
+  variant?: 'square';
 };

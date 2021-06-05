@@ -24,5 +24,5 @@ export const useQueryParams = () => {
 };
 
 type UseSetQueryParamsProps = {
-  [key: string]: string | number;
+  [key: string]: string | number | undefined;
 };

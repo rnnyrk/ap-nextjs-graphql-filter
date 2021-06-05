@@ -4,7 +4,7 @@ export const Category = styled.span<CategoryProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
+  padding: 4px 6px;
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;

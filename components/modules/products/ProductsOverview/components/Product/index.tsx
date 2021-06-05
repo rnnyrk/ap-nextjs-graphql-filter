@@ -8,15 +8,21 @@ import {
   ProductTitle,
   ProductImage,
   ProductHeader,
+  ProductPrice,
+  ProductHGroup,
 } from './styled';
 
 export const Product: React.FC<ProductProps> = ({
-  name, image, categories,
+  name, image, categories, price,
 }) => {
   return (
     <ProductContainer>
+      <ProductImage src={image} alt={name} />
       <ProductHeader>
-        <ProductTitle>{name}</ProductTitle>
+        <ProductHGroup>
+          <ProductTitle>{name}</ProductTitle>
+          <ProductPrice>&euro; {price}</ProductPrice>
+        </ProductHGroup>
         {categories?.map((category, index) => {
           return (
             <Category key={`product_category_${index}`} active>
@@ -25,7 +31,6 @@ export const Product: React.FC<ProductProps> = ({
           );
         })}
       </ProductHeader>
-      <ProductImage src={image} alt={name} />
     </ProductContainer>
   );
 };
