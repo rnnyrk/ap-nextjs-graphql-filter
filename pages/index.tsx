@@ -1,12 +1,14 @@
+import * as i from 'types';
 import * as React from 'react';
 import Head from 'next/head';
 import useSWR from 'swr';
 
 import { fetcher } from 'services';
+import { ProductsOverview } from 'modules/products';
 import { Container, Pagination } from 'common/layout';
 import { Button } from 'common/interaction';
 
-const Home = ({ products, total }) => {
+const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
   const [page, setPage] = React.useState(1);
   const limit = 20;
   const pages = Math.floor((total || 0) / 20);
@@ -16,7 +18,7 @@ const Home = ({ products, total }) => {
     limit,
   }), [page]);
 
-  const { data } = useSWR(
+  const { data } = useSWR<{ getProducts: i.Product[] }>(
     [
       `query GetProducts($offset: Int!, $limit: Int!) {
         getProducts(offset: $offset, limit: $limit) {
@@ -30,7 +32,7 @@ const Home = ({ products, total }) => {
     fetcher,
     {
       initialData: {
-        products,
+        getProducts,
       },
     },
   );
@@ -46,9 +48,9 @@ const Home = ({ products, total }) => {
       <Pagination>
         {Array.from(new Array(pages).keys()).map((pageNumber) => {
           const current = pageNumber + 1;
-
           return (
             <Button
+              key={`button_${pageNumber}`}
               onClick={() => setPage(current)}
               active={current === page}
             >
@@ -58,9 +60,16 @@ const Home = ({ products, total }) => {
         })}
       </Pagination>
 
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      {data?.getProducts && (
+        <ProductsOverview products={data.getProducts} />
+      )}
     </Container>
   );
+};
+
+type HomeProps = {
+  getProducts: i.Product[]
+  total: number;
 };
 
 export const getServerSideProps = async () => {
@@ -94,4 +103,3 @@ export const getServerSideProps = async () => {
 };
 
 export default Home;
-
