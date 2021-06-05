@@ -26,7 +26,7 @@ const Home: React.FC<HomeProps> = ({
     to: queryParams?.to,
   }), [currentPage, queryParams]);
 
-  const { data, isValidating, error } = useSWR<{
+  const { data, isValidating } = useSWR<{
     getProducts: i.Product[];
     getTotalProducts: number;
   }>(
@@ -52,8 +52,7 @@ const Home: React.FC<HomeProps> = ({
   );
 
   React.useEffect(() => {
-    const count = Math.floor((data?.getTotalProducts || 0) / limit);
-    setPages(count > 0 ? count - 1 : count);
+    setPages(Math.floor((data?.getTotalProducts || 0) / limit));
   }, [data?.getTotalProducts]);
 
   React.useEffect(() => {
@@ -113,7 +112,7 @@ export const getServerSideProps = async ({ query }) => {
     {
       offset: 0,
       limit,
-      categories: query?.categories ? query.categories.split(',') : null,
+      categories: query?.categories,
       from: query?.from,
       to: query?.to,
     },
