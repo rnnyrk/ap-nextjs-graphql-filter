@@ -4,11 +4,13 @@ import Head from 'next/head';
 import useSWR from 'swr';
 
 import { fetcher } from 'services';
-import { ProductsOverview } from 'modules/products';
+import { ProductsFilter, ProductsOverview } from 'modules/products';
 import { Container, Pagination } from 'common/layout';
 import { Button } from 'common/interaction';
 
-const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
+const Home: React.FC<HomeProps> = ({
+  getProducts, getCategories, total,
+}) => {
   const [page, setPage] = React.useState(1);
   const limit = 20;
   const pages = Math.floor((total || 0) / 20);
@@ -18,7 +20,10 @@ const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
     limit,
   }), [page]);
 
-  const { data } = useSWR<{ getProducts: i.Product[] }>(
+  const { data } = useSWR<{
+    getProducts: i.Product[],
+    getCategories: string[],
+  }>(
     [
       `query GetProducts($offset: Int!, $limit: Int!) {
         getProducts(offset: $offset, limit: $limit) {
@@ -26,6 +31,7 @@ const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
           image
           categories
         }
+        getCategories
       }`,
       variables,
     ],
@@ -33,6 +39,7 @@ const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
     {
       initialData: {
         getProducts,
+        getCategories,
       },
     },
   );
@@ -60,6 +67,8 @@ const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
         })}
       </Pagination>
 
+      <ProductsFilter categories={data?.getCategories} />
+
       {data?.getProducts && (
         <ProductsOverview products={data.getProducts} />
       )}
@@ -68,7 +77,8 @@ const Home: React.FC<HomeProps> = ({ getProducts, total }) => {
 };
 
 type HomeProps = {
-  getProducts: i.Product[]
+  getProducts: i.Product[];
+  getCategories: string[];
   total: number;
 };
 
@@ -80,6 +90,7 @@ export const getServerSideProps = async () => {
           image
           categories
         }
+        getCategories
         getTotalProducts
     }`,
     {
@@ -96,7 +107,8 @@ export const getServerSideProps = async () => {
 
   return {
     props: {
-      products: data.getProducts,
+      getProducts: data.getProducts,
+      getCategories: data.getCategories,
       total: data.getTotalProducts,
     },
   };

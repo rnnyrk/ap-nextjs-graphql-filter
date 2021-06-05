@@ -22,21 +22,3 @@ export const ProductImage = styled.img`
   max-width: 100%;
   width: 100%;
 `;
-
-export const ProductCategory = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 10px;
-  font-size: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin: 0 4px;
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.yellow};
-  border-radius: 10px;
-
-  &:first-of-type {
-    margin-left: 0;
-  }
-`;

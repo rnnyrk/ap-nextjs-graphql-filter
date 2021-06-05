@@ -1,11 +1,12 @@
 import * as i from 'types';
 import * as React from 'react';
 
+import { Category } from 'common/layout';
+
 import {
   ProductContainer,
   ProductTitle,
   ProductImage,
-  ProductCategory,
   ProductHeader,
 } from './styled';
 
@@ -16,9 +17,11 @@ export const Product: React.FC<ProductProps> = ({
     <ProductContainer>
       <ProductHeader>
         <ProductTitle>{name}</ProductTitle>
-        {categories?.map((category) => {
+        {categories?.map((category, index) => {
           return (
-            <ProductCategory>{category}</ProductCategory>
+            <Category key={`product_category_${index}`} active>
+              {category}
+            </Category>
           );
         })}
       </ProductHeader>

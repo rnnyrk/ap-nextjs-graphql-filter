@@ -22,5 +22,21 @@ export const resolvers = {
     getTotalProducts: () => {
       return data.products.length;
     },
+    getCategories: () => {
+      try {
+        return data.products.reduce((acc, product) => {
+          const tags = product.node.categoryTags;
+          if (!tags || !tags.length) return acc;
+          tags.forEach((tag) => {
+            if (!acc.includes(tag.trim())) {
+              acc.push(tag);
+            }
+          });
+          return acc;
+        }, []);
+      } catch (error) {
+        throw error;
+      }
+    },
   },
 };
