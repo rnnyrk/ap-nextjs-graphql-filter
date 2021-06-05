@@ -3,12 +3,23 @@ import data from '../data.js';
 export const resolvers = {
   Query: {
     getProducts: (_, args) => {
-      const { offset, limit } = args;
+      const { offset, limit, categories } = args;
 
       try {
-        const products = typeof offset !== 'undefined' && offset >= 0 && limit
-          ? data.products.slice(offset, offset + limit)
-          : data.products;
+        let products = data.products;
+
+        if (categories) {
+          products = data.products.filter((product) => {
+            const tags = product?.node?.categoryTags;
+            if (!tags) return false;
+            const list = categories[0].split(',');
+            return tags.some((t) => list.includes(t));
+          });
+        }
+
+        if (typeof offset !== 'undefined' && offset >= 0 && limit) {
+          products = products.slice(offset, offset + limit);
+        }
 
         return products.map((product) => ({
           name: product.node.name,

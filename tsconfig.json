@@ -19,9 +19,11 @@
     "paths": {
       "common/*": ["components/common/*"],
       "modules/*": ["components/modules/*"],
-      "hooks/*": ["services/hooks/*"],
       "pages/*": ["pages/*"],
+      "services": ["services/index"],
       "services/*": ["services/*"],
+      "hooks": ["services/hooks/index"],
+      "hooks/*": ["services/hooks/*"],
       "styles": ["styles/index"],
       "types": ["types/index"],
     },

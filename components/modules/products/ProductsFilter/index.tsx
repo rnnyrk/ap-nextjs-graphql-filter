@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { useQueryParams } from 'services/hooks';
+import { removeItemFromArray } from 'services';
+import { useQueryParams } from 'hooks';
 import { Category } from 'common/layout';
 
 import { ProductsFilterContainer } from './styled';
@@ -8,16 +9,19 @@ import { ProductsFilterContainer } from './styled';
 export const ProductsFilter: React.FC<ProductsFilterProps> = ({
   categories,
 }) => {
+  const { queryParams, setQueryParams } = useQueryParams();
   const [activeCategories, setActiveCategories] = React.useState<string[]>([]);
 
-  const { queryParams, setQueryParams } = useQueryParams();
-  console.log({ queryParams, categories });
+  const onSetCategory = (categoryName: string) => {
+    let categories = [...activeCategories];
 
-  const onSetCategory = (categoryId: string) => {
-    const categories = [...activeCategories];
-    categories.push(categoryId);
+    if (categories.includes(categoryName)) {
+      categories = removeItemFromArray(categories, categoryName);
+    } else {
+      categories.push(categoryName);
+    }
+
     setActiveCategories(categories);
-
     setQueryParams({ ...queryParams, categories: categories.join(',') });
   };
 
@@ -26,12 +30,11 @@ export const ProductsFilter: React.FC<ProductsFilterProps> = ({
   return (
     <ProductsFilterContainer>
       {categories.map((category, index) => {
-        const id = `category_${index}`;
         return (
           <Category
-            key={id}
-            active={activeCategories?.includes(id)}
-            onClick={() => onSetCategory(id)}
+            key={`category_${index}`}
+            active={activeCategories?.includes(category)}
+            onClick={() => onSetCategory(category)}
           >
             {category}
           </Category>
@@ -42,5 +45,5 @@ export const ProductsFilter: React.FC<ProductsFilterProps> = ({
 };
 
 type ProductsFilterProps = {
-  categories: string[];
+  categories?: string[];
 };

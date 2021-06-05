@@ -4,34 +4,35 @@ import Head from 'next/head';
 import useSWR from 'swr';
 
 import { fetcher } from 'services';
+import { useQueryParams } from 'hooks';
 import { ProductsFilter, ProductsOverview } from 'modules/products';
 import { Container, Pagination } from 'common/layout';
 import { Button } from 'common/interaction';
 
+const limit = 21;
+
 const Home: React.FC<HomeProps> = ({
   getProducts, getCategories, total,
 }) => {
+  const { queryParams } = useQueryParams();
   const [page, setPage] = React.useState(1);
-  const limit = 20;
-  const pages = Math.floor((total || 0) / 20);
+
+  const pages = Math.floor((total || 0) / limit);
 
   const variables = React.useMemo(() => ({
     offset: page === 1 ? 0 : (page + 1) * limit,
     limit,
-  }), [page]);
+    categories: queryParams?.categories,
+  }), [page, queryParams]);
 
-  const { data } = useSWR<{
-    getProducts: i.Product[],
-    getCategories: string[],
-  }>(
+  const { data } = useSWR<{ getProducts: i.Product[] }>(
     [
-      `query GetProducts($offset: Int!, $limit: Int!) {
-        getProducts(offset: $offset, limit: $limit) {
+      `query GetProducts($offset: Int!, $limit: Int!, $categories: [String]) {
+        getProducts(offset: $offset, limit: $limit, categories: $categories) {
           name
           image
           categories
         }
-        getCategories
       }`,
       variables,
     ],
@@ -39,7 +40,6 @@ const Home: React.FC<HomeProps> = ({
     {
       initialData: {
         getProducts,
-        getCategories,
       },
     },
   );
@@ -67,7 +67,7 @@ const Home: React.FC<HomeProps> = ({
         })}
       </Pagination>
 
-      <ProductsFilter categories={data?.getCategories} />
+      <ProductsFilter categories={getCategories} />
 
       {data?.getProducts && (
         <ProductsOverview products={data.getProducts} />
@@ -95,7 +95,7 @@ export const getServerSideProps = async () => {
     }`,
     {
       offset: 0,
-      limit: 20,
+      limit,
     },
   );
 

@@ -5,33 +5,22 @@ import { useRouter } from 'next/router';
 export const useQueryParams = () => {
   const router = useRouter();
 
-  const getQueryParams: UseQueryParamsReturnType = React.useMemo(() => {
-    console.log({
-      query: router.query,
-    });
-
-    const queryParams = qs.parse(router.query, { ignoreQueryPrefix: true });
-
+  const getQueryParams: qs.ParsedQs = React.useMemo(() => {
+    const queryParams = qs.parse(router.query as unknown as string, { ignoreQueryPrefix: true });
     return queryParams;
   }, [router.query]);
 
   const setQueryParams = (params: UseSetQueryParamsProps) => {
     // remove empty queries
     Object.keys(params).forEach((key) => params[key] === '' && delete params[key]);
-
     const search = qs.stringify(params);
-
-    router.replace({ search });
+    router.replace({ search: search || 'none' });
   };
 
   return {
     queryParams: getQueryParams,
     setQueryParams,
   };
-};
-
-type UseQueryParamsReturnType = {
-  [key: string]: any;
 };
 
 type UseSetQueryParamsProps = {
