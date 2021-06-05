@@ -7,3 +7,13 @@ export const ProductsOverviewContainer = styled.div`
   grid-gap: 20px;
   margin-top: 40px;
 `;
+
+export const ProductsEmptyState = styled.div`
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  background-color: ${({ theme }) => theme.colors.pale};
+`;

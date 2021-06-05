@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { removeItemFromArray } from 'services';
 import { useQueryParams } from 'hooks';
+import { Label } from 'common/typography';
 
 import { ColorsFilterContainer, ColorBlock } from './styled';
 
@@ -25,6 +26,7 @@ export const ColorsFilter: React.FC<ColorsFilterProps> = ({
 
   return (
     <ColorsFilterContainer>
+      <Label>Colors</Label>
       {colors.map((color) => {
         return (
           <ColorBlock

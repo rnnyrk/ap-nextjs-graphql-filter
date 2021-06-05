@@ -3,6 +3,7 @@ import * as React from 'react';
 import { removeItemFromArray } from 'services';
 import { useQueryParams } from 'hooks';
 import { Category } from 'common/layout';
+import { Label } from 'common/typography';
 
 import { CategoriesFilterContainer } from './styled';
 
@@ -33,17 +34,20 @@ export const CategoriesFilter: React.FC<CategoriesFilterProps> = ({
 
   return (
     <CategoriesFilterContainer>
-      {categories.map((category, index) => {
-        return (
-          <Category
-            key={`category_${index}`}
-            active={activeCategories?.includes(category)}
-            onClick={() => onSetCategory(category)}
-          >
-            {category}
-          </Category>
-        );
-      })}
+      <Label>Categories</Label>
+      <div>
+        {categories.map((category, index) => {
+          return (
+            <Category
+              key={`category_${index}`}
+              active={activeCategories?.includes(category)}
+              onClick={() => onSetCategory(category)}
+            >
+              {category}
+            </Category>
+          );
+        })}
+      </div>
     </CategoriesFilterContainer>
   );
 };

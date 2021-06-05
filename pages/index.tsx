@@ -28,13 +28,8 @@ const Home: React.FC<HomeProps> = ({
     to: queryParams?.to,
   }), [currentPage, queryParams]);
 
-  const { data, isValidating, error } = useSWR<{
-    getProducts: i.ProductsResponse;
-  }>(
-    [
-      Queries.ProductsQuery,
-      variables,
-    ],
+  const { data, isValidating } = useSWR<{ getProducts: i.ProductsResponse; }>(
+    [Queries.ProductsQuery, variables],
     fetcher,
     {
       initialData: {
@@ -90,17 +85,14 @@ type HomeProps = {
 };
 
 export const getServerSideProps = async ({ query }) => {
-  const data = await fetcher(
-    Queries.InitialProductsQuery,
-    {
-      offset: 0,
-      limit,
-      categories: query?.categories,
-      colors: query?.colors,
-      from: query?.from,
-      to: query?.to,
-    },
-  );
+  const data = await fetcher(Queries.InitialProductsQuery, {
+    offset: 0,
+    limit,
+    categories: query?.categories,
+    colors: query?.colors,
+    from: query?.from,
+    to: query?.to,
+  });
 
   if (!data) {
     return {

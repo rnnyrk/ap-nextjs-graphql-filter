@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { useQueryParams } from 'hooks';
 import { Button } from 'common/interaction';
+import { Label } from 'common/typography';
 
 import { PriceFilterForm, PriceFilterInput } from './styled';
 
@@ -17,15 +18,18 @@ export const PriceFilter: React.FC = () => {
 
   return (
     <PriceFilterForm onSubmit={onSubmit}>
+      <Label htmlFor="from">Price</Label>
       <PriceFilterInput
         name="from"
         type="text"
+        placeholder="From €"
         value={from}
         onChange={(event) => setFrom(event.target.value)}
       />
       <PriceFilterInput
         name="to"
         type="text"
+        placeholder="To €"
         value={to}
         onChange={(event) => setTo(event.target.value)}
       />

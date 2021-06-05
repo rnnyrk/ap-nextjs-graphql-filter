@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 export const ColorsFilterContainer = styled.div`
   width: 100%;
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   margin: 0 0 16px;
 `;
