@@ -17,20 +17,16 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "pages/*": ["pages/*"],
       "common/*": ["components/common/*"],
+      "modules/*": ["components/modules/*"],
+      "pages/*": ["pages/*"],
       "services/*": ["services/*"],
       "styles": ["styles/index"],
       "types": ["types/index"],
     },
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
   },
-  "typeRoots": [
-    "node_modules/@types"
-  ],
+  "typeRoots": ["node_modules/@types"],
   "exclude": [
     "dist",
     ".next",
