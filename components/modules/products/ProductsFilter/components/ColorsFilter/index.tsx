@@ -14,7 +14,7 @@ export const ColorsFilter: React.FC<ColorsFilterProps> = ({
 
   React.useEffect(() => {
     if (queryParams?.colors) {
-      const queryColors = queryParams.categories as string;
+      const queryColors = queryParams.colors as string;
       setActiveColors(queryColors.split(','));
     } else {
       setActiveColors([]);
@@ -36,9 +36,10 @@ export const ColorsFilter: React.FC<ColorsFilterProps> = ({
   return (
     <ColorsFilterContainer>
       <Label>Colors</Label>
-      {colors.map((color) => {
+      {colors.map((color, index) => {
         return (
           <ColorBlock
+            key={`color_${index}`}
             onClick={() => onSetColor(color)}
             active={activeColors?.includes(color)}
             color={color.toLowerCase()}
