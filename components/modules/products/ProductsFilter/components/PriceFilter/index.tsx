@@ -11,6 +11,11 @@ export const PriceFilter: React.FC = () => {
   const [from, setFrom] = React.useState<string>(queryParams?.from as string || '');
   const [to, setTo] = React.useState<string>(queryParams?.to as string || '');
 
+  React.useEffect(() => {
+    setFrom(queryParams?.from as string || '');
+    setTo(queryParams?.to as string || '');
+  }, [queryParams?.from, queryParams?.to]);
+
   const onSubmit = (event) => {
     event.preventDefault();
     setQueryParams({ ...queryParams, from, to });

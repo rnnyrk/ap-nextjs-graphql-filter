@@ -13,6 +13,7 @@ export const Category = styled.span<CategoryProps>`
   background-color: ${({ theme }) => theme.colors.white};
   border: 2px solid ${({ theme }) => theme.colors.yellow};
   border-radius: 10px;
+  appearance: none;
   transition: background-color .2s, color .2s;
 
   &:first-of-type {

@@ -59,21 +59,23 @@ const Home: React.FC<HomeProps> = ({
         <ProductsOverview products={data.getProducts.products} loading={isValidating} />
       )}
 
-      <Pagination>
-        {Array.from(new Array(pages).keys()).map((pageNumber) => {
-          const current = pageNumber + 1;
-          return (
-            <Button
-              key={`button_${pageNumber}`}
-              onClick={() => setCurrentPage(current)}
-              active={current === currentPage}
-              variant="square"
-            >
-              {current}
-            </Button>
-          );
-        })}
-      </Pagination>
+      {data?.getProducts?.products && data.getProducts.products.length > 0 && (
+        <Pagination>
+          {Array.from(new Array(pages).keys()).map((pageNumber) => {
+            const current = pageNumber + 1;
+            return (
+              <Button
+                key={`button_${pageNumber}`}
+                onClick={() => setCurrentPage(current)}
+                active={current === currentPage}
+                variant="square"
+              >
+                {current}
+              </Button>
+            );
+          })}
+        </Pagination>
+      )}
     </Container>
   );
 };

@@ -8,12 +8,14 @@ export const ColorsFilterContainer = styled.div`
   margin: 0 0 16px;
 `;
 
-export const ColorBlock = styled.div<ColorBlockProps>`
+export const ColorBlock = styled.button<ColorBlockProps>`
   width: 50px;
   height: 20px;
   cursor: pointer;
   margin: 0 4px 4px 0;
   background-color: ${({ color }) => color};
+  appearance: none;
+  border: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
   opacity: .7;
   transition: transform .2s, opacity .2s;

@@ -12,6 +12,15 @@ export const ColorsFilter: React.FC<ColorsFilterProps> = ({
   const { queryParams, setQueryParams } = useQueryParams();
   const [activeColors, setActiveColors] = React.useState<string[]>([]);
 
+  React.useEffect(() => {
+    if (queryParams?.colors) {
+      const queryColors = queryParams.categories as string;
+      setActiveColors(queryColors.split(','));
+    } else {
+      setActiveColors([]);
+    }
+  }, [queryParams?.colors]);
+
   const onSetColor = (colorName: string) => {
     let newColors = [...activeColors];
     if (newColors.includes(colorName)) {

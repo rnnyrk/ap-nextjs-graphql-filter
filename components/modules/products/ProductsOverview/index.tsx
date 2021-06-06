@@ -3,8 +3,8 @@ import * as React from 'react';
 
 import { useQueryParams } from 'hooks';
 import { Loader } from 'common/layout';
-
 import { Button } from 'common/interaction';
+
 import { Product } from './components';
 import { ProductsOverviewContainer, ProductsEmptyState } from './styled';
 

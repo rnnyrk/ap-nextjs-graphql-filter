@@ -15,10 +15,12 @@ export const CategoriesFilter: React.FC<CategoriesFilterProps> = ({
 
   React.useEffect(() => {
     if (queryParams?.categories) {
-      const categories = queryParams.categories as string;
-      setActiveCategories(categories.split(','));
+      const queryCategories = queryParams.categories as string;
+      setActiveCategories(queryCategories.split(','));
+    } else {
+      setActiveCategories([]);
     }
-  }, []);
+  }, [queryParams?.categories]);
 
   const onSetCategory = (categoryName: string) => {
     let newCategories = [...activeCategories];
@@ -39,6 +41,7 @@ export const CategoriesFilter: React.FC<CategoriesFilterProps> = ({
         {categories.map((category, index) => {
           return (
             <Category
+              as="button"
               key={`category_${index}`}
               active={activeCategories?.includes(category)}
               onClick={() => onSetCategory(category)}
